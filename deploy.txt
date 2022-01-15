@@ -1,0 +1,85 @@
+IP: 137.184.53.172
+
+Dev: 
+git add . && git commit -m "made changes: fixed" && git push
+git add . && git commit -m "made changes: fixed" && git pull
+
+------->>>>> https://dev.to/zeeshanhshaheen/how-to-deploy-react-js-and-nodejs-app-on-a-single-digitalocean-droplet-using-nginx-1pcl
+
+// Digital ocean
+- login to DO or the hosting server
+- add a domain to the droplet or the Virtual server
+- Add an 'A' record with the hostname 'www'
+
+// Namecheap
+- Login to the dom ain provider server (namecheap)
+- add custom nameservers from the hosting provider
+
+// SSH into the server from local
+
+//// update server
+- sudo apt-get update
+
+//// install nodejs
+ ---->>>> https://joshtronic.com/2020/10/25/how-to-install-nodejs-15-on-ubuntu/
+- sudo apt install -y curl
+- curl -sL https://deb.nodesource.com/setup_15.x | bash -
+- sudo apt update
+- sudo apt install -y nodejs
+
+//// instal nginx
+- sudo apt-get install nginx
+
+//// configure firewall
+- sudo ufw enable
+- sudo ufw allow OpenSSH
+- sudo ufw allow 'Nginx Full'
+- sudo ufw allow 22
+- sudo ufw allow http
+- sudo ufw allow https
+
+//// configiure nginx
+- sudo nano /etc/nginx/sites-available/default
+
+===== change the lines below =====
+
+--> root /var/www/react/[project name]/build;  #### project name here should be same name as your repo name
+--> server_name [IP ADDRESS] [domain name] wwww.[domain name];
+--> try_files $uri $uri/ /index.html;
+
+===== end change the lines below =====
+
+//// check Nginx
+- sudo nginx -t
+
+//// restart nginx
+- sudo systemctl reload nginx
+- sudo systemctl restart nginx
+
+//// make the app folder and cd into it
+- cd /var/www && mkdir react && cd react 
+
+//// clone project from VCS system (while in the react folder)
+- git clone https://btfamily@bitbucket.org/btfamily/soft-fd.git [change this to repo url]
+
+//// cd into the project folder
+- cd /var/www/react/[folder name] 
+
+//// install npm packages
+- npm i --force
+
+//// create the .env file
+- sudo nano .env
+
+//// fill in the env file details
+- [COPY and PASTE]
+
+//// Initiate the production build
+- npm run build
+- cd ~
+
+//// install certbot
+- sudo snap install core; sudo snap refresh core
+- sudo snap install --classic certbot
+- sudo ln -s /snap/bin/certbot /usr/bin/certbot
+- sudo certbot --nginx      ////// follow instructions here]
